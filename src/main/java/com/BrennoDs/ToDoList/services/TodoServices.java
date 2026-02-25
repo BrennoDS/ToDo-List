@@ -1,6 +1,7 @@
 package com.BrennoDs.ToDoList.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,27 @@ public class TodoServices {
         return todoRepository.findAll();
     }
 
+
+
     
-    public List<Todo> update( Todo todo){
-        todoRepository.save(todo);
-        return list();
+
+    
+
+    public Todo updateById(Long id, Todo todo){
+        Todo tdAntigo = todoRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("Id não encontrado")
+        );
+        Todo todoAtualizado = Todo.builder()
+        .id(tdAntigo.getId())
+        .nome(todo.getNome() != null ? todo.getNome() : tdAntigo.getNome())
+        .descricao(todo.getDescricao() != null ? todo.getDescricao() : tdAntigo.getDescricao())
+        .realizado(todo.getRealizado() != null ? todo.getRealizado() : tdAntigo.getRealizado())
+        .data(todo.getData() != null ? todo.getData() : tdAntigo.getData())
+        .build();
+        return todoRepository.saveAndFlush(todoAtualizado);
+    
     }
+        
    
     public List<Todo> delete( Long id){
         todoRepository.deleteById(id);

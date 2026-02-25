@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.services.TodoServices;
-
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
@@ -30,10 +29,12 @@ public class TodoController {
     public List<Todo> list(){
         return todoServices.list();
     }
-    @PutMapping
-    public List<Todo> update(@RequestBody Todo todo){
-        return todoServices.update(todo);
+
+    @PutMapping("{id}")
+    public Todo updateById(@PathVariable Long id,@RequestBody Todo todo){
+        return todoServices.updateById(id, todo);
     }
+    
     @DeleteMapping("{id}")
     public List<Todo> delete(@PathVariable("id") Long id){
         return todoServices.delete(id);
