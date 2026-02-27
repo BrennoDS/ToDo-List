@@ -28,7 +28,11 @@ public class TodoServices {
     }
 
 
-
+    public Todo findByNome(String nome){
+        return todoRepository.findByNome(nome).orElseThrow(
+            () -> new RuntimeException("Nome não encontrado")
+        );
+    }
     
 
     

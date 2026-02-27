@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.services.TodoServices;
+import org.springframework.web.bind.annotation.RequestParam;
+
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
@@ -29,6 +31,12 @@ public class TodoController {
     public List<Todo> list(){
         return todoServices.list();
     }
+
+    @GetMapping("/search")
+    public Todo getByNome(@RequestParam String nome) {
+        return todoServices.findByNome(nome);
+    }
+    
 
     @PutMapping("{id}")
     public Todo updateById(@PathVariable Long id,@RequestBody Todo todo){
