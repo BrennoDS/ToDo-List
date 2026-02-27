@@ -1,15 +1,9 @@
 package com.BrennoDs.ToDoList.services;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.boot.autoconfigure.task.TaskExecutionProperties.Simple;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-
 import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.repository.TodoRepository;
 

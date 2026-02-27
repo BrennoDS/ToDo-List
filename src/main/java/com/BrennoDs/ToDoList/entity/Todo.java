@@ -1,7 +1,7 @@
 package com.BrennoDs.ToDoList.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -28,7 +28,7 @@ public class Todo {
     private String nome;
     private String descricao;
     private Boolean realizado;
-    
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime data;
 
@@ -37,6 +37,12 @@ public class Todo {
     public void prePersist(){
         if(this.data == null){
             this.data = LocalDateTime.now();
+        }
+        if(this.realizado == null){
+            this.realizado = false;
+        }
+        if(this.descricao == null){
+            this.descricao = "";
         }
     }
 
@@ -71,6 +77,4 @@ public class Todo {
         this.data = data;
     }
 
-     
-    
 }
