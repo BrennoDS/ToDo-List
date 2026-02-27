@@ -45,11 +45,13 @@ public class TodoServices {
         .id(tdAntigo.getId())
         .nome(todo.getNome() != null ? todo.getNome() : tdAntigo.getNome())
         .descricao(todo.getDescricao() != null ? todo.getDescricao() : tdAntigo.getDescricao())
-        .realizado(todo.getRealizado() != null ? todo.getRealizado() : tdAntigo.getRealizado())
-        .data(todo.getData() != null ? todo.getData() : tdAntigo.getData())
+        .status(todo.getStatus() != null ? todo.getStatus() : tdAntigo.getStatus())
+        .dataCriacao(todo.getDataCriacao() != null ? todo.getDataCriacao() : tdAntigo.getDataCriacao())
+        .dataFinalizacao(todo.getDataFinalizacao() != null ? todo.getDataFinalizacao() : tdAntigo.getDataFinalizacao())
         .build();
         return todoRepository.saveAndFlush(todoAtualizado);
     }
+
    
     public List<Todo> delete( Long id){
         todoRepository.deleteById(id);

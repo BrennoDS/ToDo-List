@@ -3,7 +3,9 @@ package com.BrennoDs.ToDoList.entity;
 import java.time.LocalDateTime;
 
 
+import com.BrennoDs.ToDoList.Enums.ToDoStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,21 +27,31 @@ public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
+
     private String descricao;
-    private Boolean realizado;
+    private ToDoStatus status;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime data;
+    private LocalDateTime dataCriacao;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime dataFinalizacao;
+
 
 
     @PrePersist
     public void prePersist(){
-        if(this.data == null){
-            this.data = LocalDateTime.now();
+        if(this.dataCriacao == null){
+            this.dataCriacao = LocalDateTime.now();
         }
-        if(this.realizado == null){
-            this.realizado = false;
+        if(this.dataFinalizacao.isBefore(this.dataCriacao)){
+            throw new RuntimeException("Data de finalização não pode ser anterior à data de criação");
+        }
+        if(this.status == null){
+            this.status = ToDoStatus.PENDENTE;
         }
         if(this.descricao == null){
             this.descricao = "";
@@ -64,17 +76,27 @@ public class Todo {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    public Boolean getRealizado() {
-        return realizado;
+    public ToDoStatus getStatus() {
+        return status;
     }
-    public void setRealizado(Boolean realizado) {
-        this.realizado = realizado;
+    public void setStatus(ToDoStatus status) {
+        this.status = status;
     }
-    public LocalDateTime getData() {
-        return data;
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
-    public void setData(LocalDateTime data) {
-        this.data = data;
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
+
+    public LocalDateTime getDataFinalizacao() {
+        return dataFinalizacao;
+    }
+
+    public void setDataFinalizacao(LocalDateTime dataFinalizacao) {
+        this.dataFinalizacao = dataFinalizacao;
+    }
+    
 
 }
