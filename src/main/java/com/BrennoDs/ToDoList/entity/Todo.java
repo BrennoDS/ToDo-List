@@ -47,9 +47,10 @@ public class Todo {
         if(this.dataCriacao == null){
             this.dataCriacao = LocalDateTime.now();
         }
-        if(this.dataFinalizacao.isBefore(this.dataCriacao)){
-            throw new RuntimeException("Data de finalização não pode ser anterior à data de criação");
+        if(this.dataFinalizacao == null || this.dataFinalizacao.isBefore(this.dataCriacao)){
+            this.dataFinalizacao = this.dataCriacao.plusDays(1);
         }
+        
         if(this.status == null){
             this.status = ToDoStatus.PENDENTE;
         }

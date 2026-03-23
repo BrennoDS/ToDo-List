@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.BrennoDs.ToDoList.Request.ToDoGetRequest;
+import com.BrennoDs.ToDoList.Request.ToDoPostRequestBody;
+import com.BrennoDs.ToDoList.Request.ToDoPutRequestBody;
 import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.services.TodoServices;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,24 +26,25 @@ public class TodoController {
     public TodoController(TodoServices todoServices) {
         this.todoServices = todoServices;
     }
-    @PostMapping
-    public List<Todo> create(@RequestBody Todo todo){
-        return todoServices.create(todo);
-    }
+
     @GetMapping
     public List<Todo> list(){
         return todoServices.list();
     }
 
     @GetMapping("/search")
-    public Todo getByNome(@RequestParam String nome) {
+    public Todo getByNome(@RequestBody ToDoGetRequest nome) {
         return todoServices.findByNome(nome);
     }
-    
 
+    @PostMapping
+    public List<Todo> create(@RequestBody ToDoPostRequestBody toDoPostRequestBody){
+        return todoServices.create(toDoPostRequestBody);
+    }
+    
     @PutMapping("{id}")
-    public Todo updateById(@PathVariable Long id,@RequestBody Todo todo){
-        return todoServices.updateById(id, todo);
+    public Todo updateById(@PathVariable Long id,@RequestBody ToDoPutRequestBody toDoPutRequestBody){
+        return todoServices.updateById(id, toDoPutRequestBody);
     }
     
     @DeleteMapping("{id}")
