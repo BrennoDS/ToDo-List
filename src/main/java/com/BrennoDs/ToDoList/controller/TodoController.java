@@ -2,6 +2,8 @@ package com.BrennoDs.ToDoList.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +18,8 @@ import com.BrennoDs.ToDoList.Request.ToDoPostRequestBody;
 import com.BrennoDs.ToDoList.Request.ToDoPutRequestBody;
 import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.services.TodoServices;
-import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @RestController
 @RequestMapping("/todos")
@@ -28,27 +31,27 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<Todo> list(){
-        return todoServices.list();
+    public ResponseEntity<List<Todo>> list(){
+        return ResponseEntity.ok(todoServices.list());
     }
 
     @GetMapping("/search")
-    public Todo getByNome(@RequestBody ToDoGetRequest nome) {
-        return todoServices.findByNome(nome);
+    public ResponseEntity<Todo> getByNome(@RequestBody ToDoGetRequest nome) {
+        return new ResponseEntity<Todo>(todoServices.findByNome(nome), HttpStatus.OK);
     }
 
     @PostMapping
-    public List<Todo> create(@RequestBody ToDoPostRequestBody toDoPostRequestBody){
-        return todoServices.create(toDoPostRequestBody);
+    public ResponseEntity<List<Todo>> create(@RequestBody ToDoPostRequestBody toDoPostRequestBody){
+        return new ResponseEntity<List<Todo>>(todoServices.create(toDoPostRequestBody), HttpStatus.CREATED);
     }
     
     @PutMapping("{id}")
-    public Todo updateById(@PathVariable Long id,@RequestBody ToDoPutRequestBody toDoPutRequestBody){
-        return todoServices.updateById(id, toDoPutRequestBody);
+    public ResponseEntity<Todo> updateById(@PathVariable Long id,@RequestBody ToDoPutRequestBody toDoPutRequestBody){
+        return new ResponseEntity<Todo>(todoServices.updateById(id, toDoPutRequestBody), HttpStatus.OK);
     }
     
     @DeleteMapping("{id}")
-    public List<Todo> delete(@PathVariable("id") Long id){
-        return todoServices.delete(id);
+    public ResponseEntity<List<Todo>> delete(@PathVariable("id") Long id){
+        return new ResponseEntity<List<Todo>>(todoServices.delete(id), HttpStatus.OK);
     }
 }

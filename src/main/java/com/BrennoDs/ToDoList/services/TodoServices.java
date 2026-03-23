@@ -2,8 +2,11 @@ package com.BrennoDs.ToDoList.services;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.BrennoDs.ToDoList.Request.ToDoGetRequest;
 import com.BrennoDs.ToDoList.Request.ToDoPostRequestBody;
@@ -42,7 +45,7 @@ public class TodoServices {
     public Todo findByNome(ToDoGetRequest toDoGetRequest){
         String nome = toDoGetRequest.getNome();
         return todoRepository.findByNome(nome).orElseThrow(
-            () -> new RuntimeException("Nome não encontrado")
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome não encontrado")
         );
     }
     
@@ -51,7 +54,7 @@ public class TodoServices {
 
     public Todo updateById(@NonNull Long id, @NonNull ToDoPutRequestBody toDoPutRequestBody){
         Todo tdAntigo = todoRepository.findById(id).orElseThrow(
-            () -> new RuntimeException("Id não encontrado")
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id não encontrado")
         );
         Todo todoAtualizado = Todo.builder()
         .id(tdAntigo.getId())
