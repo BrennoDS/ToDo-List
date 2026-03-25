@@ -40,8 +40,7 @@ public class TodoServices {
     }
 
 
-    public Todo findByNome(ToDoGetRequest toDoGetRequest){
-        String nome = toDoGetRequest.getNome();
+    public Todo findByNome(String nome){
         return todoRepository.findByNome(nome).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome não encontrado")
         );

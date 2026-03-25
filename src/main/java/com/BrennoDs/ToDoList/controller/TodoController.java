@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.BrennoDs.ToDoList.Request.ToDoGetRequest;
@@ -35,8 +36,8 @@ public class TodoController {
         return ResponseEntity.ok(todoServices.list());
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Todo> getByNome(@RequestBody ToDoGetRequest nome) {
+    @GetMapping("/findByNome")
+    public ResponseEntity<Todo> getByNome(@RequestParam(required = false) String nome) {
         return new ResponseEntity<Todo>(todoServices.findByNome(nome), HttpStatus.OK);
     }
 
