@@ -12,27 +12,25 @@ import com.BrennoDs.ToDoList.Request.ToDoGetRequest;
 import com.BrennoDs.ToDoList.Request.ToDoPostRequestBody;
 import com.BrennoDs.ToDoList.Request.ToDoPutRequestBody;
 import com.BrennoDs.ToDoList.entity.Todo;
+import com.BrennoDs.ToDoList.mapper.ToDoMapper;
 import com.BrennoDs.ToDoList.repository.TodoRepository;
 
 @Service
 public class TodoServices {
     private TodoRepository todoRepository;
+    private ToDoMapper toDoMapper;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-    public TodoServices(TodoRepository todoRepository){
+
+    public TodoServices(TodoRepository todoRepository, ToDoMapper toDoMapper){
         this.todoRepository = todoRepository;
+        this.toDoMapper = toDoMapper;
+
     }
     
     
     public List<Todo> create(@NonNull ToDoPostRequestBody toDoPostRequestBody){
-        Todo todo = Todo.builder()
-        .nome(toDoPostRequestBody.getNome())
-        .descricao(toDoPostRequestBody.getDescricao())
-        .status(toDoPostRequestBody.getStatus())
-        .dataCriacao(toDoPostRequestBody.getDataCriacao())
-        .dataFinalizacao(toDoPostRequestBody.getDataFinalizacao())
-        .build();
-        todoRepository.save(todo);
+        todoRepository.save(toDoMapper.mapperToDo(toDoPostRequestBody));
         return list();
 
     }
@@ -56,6 +54,7 @@ public class TodoServices {
         Todo tdAntigo = todoRepository.findById(id).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id não encontrado")
         );
+        
         Todo todoAtualizado = Todo.builder()
         .id(tdAntigo.getId())
         .nome(toDoPutRequestBody.getNome() != null ? toDoPutRequestBody.getNome() : tdAntigo.getNome())
