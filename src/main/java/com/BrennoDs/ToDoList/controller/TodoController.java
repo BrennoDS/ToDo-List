@@ -20,6 +20,8 @@ import com.BrennoDs.ToDoList.Request.ToDoPutRequestBody;
 import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.services.TodoServices;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -47,12 +49,12 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Todo>> create(@RequestBody ToDoPostRequestBody toDoPostRequestBody){
+    public ResponseEntity<List<Todo>> create(@RequestBody @Valid ToDoPostRequestBody toDoPostRequestBody){
         return new ResponseEntity<List<Todo>>(todoServices.create(toDoPostRequestBody), HttpStatus.CREATED);
     }
     
     @PutMapping("{id}")
-    public ResponseEntity<Todo> updateById(@PathVariable Long id,@RequestBody ToDoPutRequestBody toDoPutRequestBody){
+    public ResponseEntity<Todo> updateById(@PathVariable Long id,@RequestBody @Valid ToDoPutRequestBody toDoPutRequestBody){
         return new ResponseEntity<Todo>(todoServices.updateById(id, toDoPutRequestBody), HttpStatus.OK);
     }
     
