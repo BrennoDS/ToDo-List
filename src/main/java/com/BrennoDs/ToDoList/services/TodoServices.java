@@ -3,22 +3,20 @@ package com.BrennoDs.ToDoList.services;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.BrennoDs.ToDoList.Request.ToDoGetRequest;
 import com.BrennoDs.ToDoList.Request.ToDoPostRequestBody;
 import com.BrennoDs.ToDoList.Request.ToDoPutRequestBody;
 import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.exception.BadRequestException;
 import com.BrennoDs.ToDoList.mapper.ToDoMapper;
 import com.BrennoDs.ToDoList.repository.TodoRepository;
-
-import jakarta.validation.Valid;
 
 @Service
 public class TodoServices {
@@ -46,6 +44,9 @@ public class TodoServices {
 
     }
     
+    public Page<Todo> listAll(Pageable pageable){
+        return todoRepository.findAll(pageable);
+    }
     public List<Todo> list(){
         return todoRepository.findAll();
     }

@@ -2,6 +2,8 @@ package com.BrennoDs.ToDoList.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.BrennoDs.ToDoList.Request.ToDoGetRequest;
 import com.BrennoDs.ToDoList.Request.ToDoPostRequestBody;
 import com.BrennoDs.ToDoList.Request.ToDoPutRequestBody;
 import com.BrennoDs.ToDoList.entity.Todo;
@@ -34,8 +35,8 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> list(){
-        return ResponseEntity.ok(todoServices.list());
+    public ResponseEntity<Page<Todo>> list(Pageable pageable){
+        return ResponseEntity.ok(todoServices.listAll(pageable));
     }
 
     @GetMapping("/findById")
