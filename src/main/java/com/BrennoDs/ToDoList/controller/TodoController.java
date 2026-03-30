@@ -39,9 +39,19 @@ public class TodoController {
         return ResponseEntity.ok(todoServices.listAll(pageable));
     }
 
-    @GetMapping("/findById")
-    public ResponseEntity<Todo> getById(@RequestParam Long Id){
-        return ResponseEntity.ok(todoServices.findById(Id));
+    @GetMapping("/all")
+    public ResponseEntity<List<Todo>> list(){
+        return ResponseEntity.ok(todoServices.listAll());
+    }
+
+    // @GetMapping("/findById")
+    // public ResponseEntity<Todo> getById(@RequestParam Long Id){
+    //     return ResponseEntity.ok(todoServices.findById(Id));
+    // }
+
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<Todo> getById(@PathVariable Long id){
+        return ResponseEntity.ok(todoServices.findById(id));
     }
 
     @GetMapping("/findByNome")

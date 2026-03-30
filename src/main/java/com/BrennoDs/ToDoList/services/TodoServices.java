@@ -47,6 +47,10 @@ public class TodoServices {
     public Page<Todo> listAll(Pageable pageable){
         return todoRepository.findAll(pageable);
     }
+
+    public List<Todo> listAll(){
+        return todoRepository.findAll();
+    }
     public List<Todo> list(){
         return todoRepository.findAll();
     }
