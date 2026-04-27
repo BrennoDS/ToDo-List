@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ import com.BrennoDs.ToDoList.services.TodoServices;
 import jakarta.validation.Valid;
 
 
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
@@ -60,7 +61,7 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Todo>> create(@RequestBody @Valid ToDoPostRequestBody toDoPostRequestBody){
+    public ResponseEntity<List<Todo>> create(@RequestBody ToDoPostRequestBody toDoPostRequestBody){
         return new ResponseEntity<List<Todo>>(todoServices.create(toDoPostRequestBody), HttpStatus.CREATED);
     }
     

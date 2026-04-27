@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>ToDo</title>
+<style>
+  body { font-family: Arial; margin: 30px; }
+  input, select, button { margin: 5px; padding: 6px; }
+  .todo { border: 1px solid #ccc; padding: 10px; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h2>Criar / Atualizar Tarefa</h2>
+
+<input id="id" type="hidden">
+<input id="nome" placeholder="Nome">
+<input id="descricao" placeholder="Descrição">
+<input id="dataLimite" type="datetime-local">
+
+<select id="status">
+  <option value="PENDENTE">PENDENTE</option>
+  <option value="EM_ANDAMENTO">EM ANDAMENTO</option>
+  <option value="CONCLUIDO">CONCLUIDO</option>
+</select>
+
+<br>
+<button onclick="salvar()">Salvar</button>
+<button onclick="limpar()">Limpar</button>
+
+<h2>Lista</h2>
+<button onclick="carregar()">Atualizar</button>
+
+<div id="lista"></div>
+
+<script>
+const API = "http://localhost:8080/todos";
+
+function formatarDataParaEnvio(data) {
+  if (!data) return null;
+  return data + ":00"; // adiciona segundos
+}
+
+function formatarDataParaInput(data) {
+  if (!data) return "";
+  return data.substring(0,16); // funciona com ISO
+}
+
+async function carregar() {
+  const res = await fetch(API + "/all");
+  const dados = await res.json();
+
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  dados.forEach(todo => {
+    lista.innerHTML += `
+      <div class="todo">
+        <b>${todo.nome}</b><br>
+        <hr>
+        ${todo.descricao}<br>
+        Status: ${todo.status}<br>
+        Criado em: ${formatarData(todo.dataCriacao)}<br>
+        Limite: ${formatarData(todo.dataLimite)}<br>
+        Concluído em: ${formatarData(todo.dataConclusao)}<br>
+        <hr>
+        <button onclick='editar(${JSON.stringify(todo)})'>Editar</button>
+        <button onclick="deletar(${todo.id})">Excluir</button>
+      </div>
+    `;
+  });
+}
+
+function editar(todo) {
+  document.getElementById("id").value = todo.id;
+  document.getElementById("nome").value = todo.nome;
+  document.getElementById("descricao").value = todo.descricao;
+  document.getElementById("dataLimite").value = formatarDataParaInput(todo.dataLimite);
+  document.getElementById("status").value = todo.status;
+}
+
+function limpar() {
+  document.getElementById("id").value = "";
+  document.getElementById("nome").value = "";
+  document.getElementById("descricao").value = "";
+  document.getElementById("dataLimite").value = "";
+  document.getElementById("status").value = "PENDENTE";
+}
+
+function formatarData(data) {
+  if (!data) return "N/A";
+
+  const d = new Date(data);
+
+  const dia = String(d.getDate()).padStart(2, '0');
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  const ano = d.getFullYear();
+
+  const hora = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  const seg = String(d.getSeconds()).padStart(2, '0');
+
+  return `${dia}/${mes}/${ano} ${hora}:${min}:${seg}`;
+}
+
+async function salvar() {
+  const id = document.getElementById("id").value;
+
+  const body = {
+    nome: document.getElementById("nome").value,
+    descricao: document.getElementById("descricao").value,
+    status: document.getElementById("status").value,
+    dataLimite: formatarDataParaEnvio(
+      document.getElementById("dataLimite").value
+    )
+  };
+
+  if (id) {
+    // UPDATE
+    await fetch(API + "/" + id, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+  } else {
+    // CREATE
+    await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+  }
+
+  limpar();
+  carregar();
+}
+
+async function deletar(id) {
+  await fetch(API + "/" + id, { method: "DELETE" });
+  carregar();
+}
+
+carregar();
+</script>
+
+</body>
+</html>
