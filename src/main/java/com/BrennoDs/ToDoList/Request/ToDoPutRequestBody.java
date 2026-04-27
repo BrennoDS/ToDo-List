@@ -20,5 +20,5 @@ public class ToDoPutRequestBody {
     private LocalDateTime dataCriacao;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime dataFinalizacao;
+    private LocalDateTime dataLimite;
 }
