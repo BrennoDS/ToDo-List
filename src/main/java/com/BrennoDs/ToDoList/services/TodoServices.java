@@ -8,6 +8,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.BrennoDs.ToDoList.Enums.ToDoStatus;
 import com.BrennoDs.ToDoList.Request.ToDoPostRequestBody;
 import com.BrennoDs.ToDoList.Request.ToDoPutRequestBody;
@@ -15,6 +17,8 @@ import com.BrennoDs.ToDoList.entity.Todo;
 import com.BrennoDs.ToDoList.exception.BadRequestException;
 import com.BrennoDs.ToDoList.mapper.ToDoMapper;
 import com.BrennoDs.ToDoList.repository.TodoRepository;
+
+import jakarta.validation.Valid;
 
 @Service
 public class TodoServices {
@@ -54,7 +58,7 @@ public class TodoServices {
 
     }
     
-    public Todo updateById(@NonNull Long id, @NonNull ToDoPutRequestBody toDoPutRequestBody){
+    public Todo updateById(@NonNull Long id, ToDoPutRequestBody toDoPutRequestBody){
         Todo tdAntigo = findById(id);
         
         Todo todoAtualizado = Todo.builder()
@@ -66,7 +70,18 @@ public class TodoServices {
         .dataLimite(toDoPutRequestBody.getDataLimite() != null ? toDoPutRequestBody.getDataLimite() : tdAntigo.getDataLimite())
         .dataConclusao(conclusao(toDoPutRequestBody, tdAntigo))
         .build();
+
+        if(todoAtualizado.getStatus() != ToDoStatus.CONCLUIDO){
+            if(todoAtualizado.getDataLimite().isBefore(LocalDateTime.now())){
+                todoAtualizado.setStatus(ToDoStatus.ATRASADO);
+            }
+            else{
+                todoAtualizado.setStatus(ToDoStatus.PENDENTE);
+            }
+        }
         return todoRepository.saveAndFlush(todoAtualizado);
+
+
     }
 
    
@@ -78,7 +93,7 @@ public class TodoServices {
 
     @Scheduled(cron = "*/10 * * * * *")
     @Transactional
-    public void atualizarVencidos(  ){
+    public void atualizarVencidos(){
         List<Todo> vencidos = todoRepository.findByDataLimiteBeforeAndStatusNotIn(
             LocalDateTime.now(),
             List.of(ToDoStatus.CONCLUIDO, ToDoStatus.ATRASADO)

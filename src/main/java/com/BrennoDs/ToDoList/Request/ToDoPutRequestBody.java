@@ -9,16 +9,11 @@ import lombok.Data;
 @Data
 public class ToDoPutRequestBody {
     private Long id;
-
-    @NotBlank(message = "O nome é obrigatório")
     private String nome;
-
     private String descricao;
     private ToDoStatus status;
-
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dataCriacao;
-
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dataLimite;
 }

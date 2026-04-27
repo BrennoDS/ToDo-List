@@ -17,4 +17,5 @@ public interface TodoRepository extends JpaRepository<Todo,Long>{
         LocalDateTime agora, 
         List<ToDoStatus> statusExcuidos
     );
+
 }
