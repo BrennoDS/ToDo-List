@@ -43,7 +43,7 @@ Projeto fullstack para gerenciamento de tarefas (ToDo List), desenvolvido com **
 
 ##  Como rodar o projeto
 
-### 🔹 Backend
+###  Backend
 
 1. Clone o repositório:
 ```bash
@@ -64,7 +64,7 @@ Ou rode pela sua IDE (IntelliJ / Eclipse)
 
 ---
 
-### 🔹 Frontend
+###  Frontend
 
  **IMPORTANTE:** não abra o HTML com `file://`
 
@@ -188,7 +188,7 @@ Interface simples com:
 
 ---
 
-## 👨‍💻 Autor
+##  Autor
 
 Desenvolvido por **Brenno Siqueira**
 
